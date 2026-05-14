@@ -1,0 +1,2 @@
+Terreiro;4000
+Secador;80000

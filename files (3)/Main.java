@@ -1,3 +1,5 @@
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 public class Main {
@@ -10,9 +12,12 @@ public class Main {
     static String[] destinos = new String[100];
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        configurarAcentos();
+
+        Scanner sc = new Scanner(System.in, "UTF-8");
 
         Persistencia.carregarTudo(datas, matriculas, codigosTalhao, placas, litrosColhidos, destinos);
+        Armazenamento.carregarResumo();
 
         int opcao = -1;
 
@@ -118,6 +123,16 @@ public class Main {
                     aguardarTecla(sc);
                     break;
 
+                case 10:
+                    listarModulos();
+                    aguardarTecla(sc);
+                    break;
+
+                case 11:
+                    Armazenamento.listarResumo(datas, litrosColhidos, destinos, Colheita.quantidadeColheitas);
+                    aguardarTecla(sc);
+                    break;
+
                 case 0:
                     salvarDados();
                     System.out.println("Sistema encerrado.");
@@ -142,7 +157,36 @@ public class Main {
         System.out.println("7 - Registrar Colheita");
         System.out.println("8 - Listar Colheitas");
         System.out.println("9 - Pesquisar Colheita");
+        System.out.println("10 - Listar em ordem alfabetica");
+        System.out.println("11 - Listar Armazenamento");
         System.out.println("0 - Sair");
+    }
+
+    public static void listarModulos() {
+        String[] modulos = {
+                "Cadastro",
+                "Colheita",
+                "Main",
+                "Armazenamento",
+                "Persistencia",
+                "Relatorios"
+        };
+
+        System.out.println("\n--- Modulos do Sistema ---");
+
+        for (int i = 0; i < modulos.length - 1; i++) {
+            for (int j = i + 1; j < modulos.length; j++) {
+                if (modulos[i].compareToIgnoreCase(modulos[j]) > 0) {
+                    String auxiliar = modulos[i];
+                    modulos[i] = modulos[j];
+                    modulos[j] = auxiliar;
+                }
+            }
+        }
+
+        for (int i = 0; i < modulos.length; i++) {
+            System.out.println((i + 1) + " - " + modulos[i]);
+        }
     }
 
     public static void aguardarTecla(Scanner sc) {
@@ -159,5 +203,15 @@ public class Main {
 
     public static void salvarDados() {
         Persistencia.salvarTudo(datas, matriculas, codigosTalhao, placas, litrosColhidos, destinos);
+        Armazenamento.salvarResumo(litrosColhidos, destinos, Colheita.quantidadeColheitas);
+    }
+
+    public static void configurarAcentos() {
+        try {
+            System.setOut(new PrintStream(System.out, true, "UTF-8"));
+            System.setErr(new PrintStream(System.err, true, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Nao foi possivel configurar acentos em UTF-8.");
+        }
     }
 }
