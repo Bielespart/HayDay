@@ -27,7 +27,7 @@ public class Relatorios {
 
             for (int j = 0; j < colheitas.size(); j++) {
                 if (colheitas.get(j)[1].equals(matricula)) {
-                    totalFuncionario += Integer.parseInt(colheitas.get(j)[4]);
+                    totalFuncionario += converterInteiro(colheitas.get(j)[4], "litros colhidos");
                 }
             }
 
@@ -60,12 +60,12 @@ public class Relatorios {
         for (int i = 0; i < talhoes.size(); i++) {
             String[] talhao = talhoes.get(i);
             String codigo = talhao[0];
-            int estimativa = Integer.parseInt(talhao[3]);
+            int estimativa = converterInteiro(talhao[3], "estimativa do talhão");
             int produzido = 0;
 
             for (int j = 0; j < colheitas.size(); j++) {
                 if (colheitas.get(j)[2].equalsIgnoreCase(codigo)) {
-                    produzido += Integer.parseInt(colheitas.get(j)[4]);
+                    produzido += converterInteiro(colheitas.get(j)[4], "litros colhidos");
                 }
             }
 
@@ -94,7 +94,7 @@ public class Relatorios {
 
         for (int i = 0; i < colheitas.size(); i++) {
             String[] c = colheitas.get(i);
-            int litros = Integer.parseInt(c[4]);
+            int litros = converterInteiro(c[4], "litros colhidos");
             if (c[5].equals("Terreiro")) {
                 totalTerreiro += litros;
             } else if (c[5].equals("Secador")) {
@@ -126,12 +126,12 @@ public class Relatorios {
         for (int i = 0; i < talhoes.size(); i++) {
             String[] talhao = talhoes.get(i);
             String codigo = talhao[0];
-            int estimativa = Integer.parseInt(talhao[3]);
+            int estimativa = converterInteiro(talhao[3], "estimativa do talhão");
             int produzido = 0;
 
             for (int j = 0; j < colheitas.size(); j++) {
                 if (colheitas.get(j)[2].equalsIgnoreCase(codigo)) {
-                    produzido += Integer.parseInt(colheitas.get(j)[4]);
+                    produzido += converterInteiro(colheitas.get(j)[4], "litros colhidos");
                 }
             }
 
@@ -155,5 +155,20 @@ public class Relatorios {
             System.out.println("  Nenhum talhão atingiu 80% da estimativa ainda.");
         }
         System.out.println("══════════════════════════════════════════");
+    }
+
+    private static int converterInteiro(String valor, String campo) {
+
+        if (valor == null) {
+            System.out.println("Valor vazio em " + campo + ". Considerando 0.");
+            return 0;
+        }
+
+        try {
+            return Integer.parseInt(valor);
+        } catch (NumberFormatException e) {
+            System.out.println("Valor invalido em " + campo + ": " + valor + ". Considerando 0.");
+            return 0;
+        }
     }
 }

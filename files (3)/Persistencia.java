@@ -4,7 +4,7 @@ import java.io.*;
 public class Persistencia {
 
     // ─────────────────────────────────────────
-    // SALVAR DADOS
+    // SALVAR DADOs
     // ─────────────────────────────────────────
 
     public static void salvarDados(
@@ -42,8 +42,10 @@ public class Persistencia {
 
             for (int i = 0; i < total; i++) {
 
-                bw.write(dados[i]);
-                bw.newLine();
+                if (dados[i] != null) {
+                    bw.write(dados[i]);
+                    bw.newLine();
+                }
             }
 
             bw.close();
@@ -67,13 +69,13 @@ public class Persistencia {
             String frota[],
             String colheitas[]) {
 
-        Main.qtdFuncionarios =
+        Cadastro.totalFuncionarios =
             carregarArquivo("funcionarios.txt", funcionarios);
 
-        Main.qtdTalhoes =
+        Cadastro.totalTalhoes =
             carregarArquivo("talhoes.txt", talhoes);
 
-        Main.qtdFrota =
+        Cadastro.totalTratores =
             carregarArquivo("frota.txt", frota);
 
         Colheita.quantidadeColheitas =
@@ -81,9 +83,9 @@ public class Persistencia {
 
         System.out.println(
             "✔ Dados carregados: "
-            + Main.qtdFuncionarios + " funcionário(s), "
-            + Main.qtdTalhoes + " talhão(ões), "
-            + Main.qtdFrota + " trator(es), "
+            + Cadastro.totalFuncionarios + " funcionário(s), "
+            + Cadastro.totalTalhoes + " talhão(ões), "
+            + Cadastro.totalTratores + " trator(es), "
             + Colheita.quantidadeColheitas + " colheita(s)."
         );
     }
@@ -105,6 +107,11 @@ public class Persistencia {
             while ((linha = br.readLine()) != null) {
 
                 if (!linha.trim().equals("")) {
+
+                    if (total >= dados.length) {
+                        System.out.println("Arquivo " + nomeArquivo + " possui mais registros que o limite permitido.");
+                        break;
+                    }
 
                     dados[total] = linha;
                     total++;

@@ -2,20 +2,12 @@ import java.util.Scanner;
 
 public class Main {
 
-    static String[] funcionarios = new String[100];
-    static String[] talhoes = new String[100];
-    static String[] frota = new String[100];
-
     static String[] datas = new String[100];
     static String[] matriculas = new String[100];
     static String[] codigosTalhao = new String[100];
     static String[] placas = new String[100];
     static String[] litrosColhidos = new String[100];
     static String[] destinos = new String[100];
-
-    static int qtdFuncionarios = 0;
-    static int qtdTalhoes = 0;
-    static int qtdFrota = 0;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -26,41 +18,49 @@ public class Main {
             exibirMenu();
 
             System.out.print("Opcao: ");
-            opcao = Integer.parseInt(sc.nextLine());
+            try {
+                opcao = Integer.parseInt(sc.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Opcao invalida. Digite apenas numeros.");
+                continue;
+            }
 
             switch (opcao) {
                 case 1:
-                    System.out.println("Cadastrar funcionario");
+                    Cadastro.cadastrarFuncionario(sc);
                     break;
 
                 case 2:
-                    System.out.println("Cadastrar talhao");
+                    Cadastro.cadastrarTalhao(sc);
                     break;
 
                 case 3:
-                    System.out.println("Cadastrar trator");
+                    Cadastro.cadastrarTrator(sc);
                     break;
 
                 case 4:
-                    System.out.println("Listar funcionarios");
+                    Cadastro.listarFuncionarios();
+                    aguardarTecla(sc);
                     break;
 
                 case 5:
-                    System.out.println("Listar talhoes");
+                    Cadastro.listarTalhoes();
+                    aguardarTecla(sc);
                     break;
 
                 case 6:
-                    System.out.println("Listar tratores");
+                    Cadastro.listarTratores();
+                    aguardarTecla(sc);
                     break;
 
                 case 7:
                     Colheita.registrarColheita(
-                            funcionarios,
-                            qtdFuncionarios,
-                            talhoes,
-                            qtdTalhoes,
-                            frota,
-                            qtdFrota,
+                            Cadastro.nomesFuncionarios,
+                            Cadastro.totalFuncionarios,
+                            Cadastro.nomesTalhoes,
+                            Cadastro.totalTalhoes,
+                            Cadastro.placas,
+                            Cadastro.totalTratores,
                             datas,
                             matriculas,
                             codigosTalhao,
@@ -68,6 +68,7 @@ public class Main {
                             litrosColhidos,
                             destinos,
                             sc);
+                    aguardarTecla(sc);
                     break;
 
                 case 8:
@@ -78,6 +79,19 @@ public class Main {
                             placas,
                             litrosColhidos,
                             destinos);
+                    aguardarTecla(sc);
+                    break;
+
+                case 9:
+                    Colheita.pesquisarColheita(
+                            datas,
+                            matriculas,
+                            codigosTalhao,
+                            placas,
+                            litrosColhidos,
+                            destinos,
+                            sc);
+                    aguardarTecla(sc);
                     break;
 
                 case 0:
@@ -102,6 +116,12 @@ public class Main {
         System.out.println("6 - Listar Tratores");
         System.out.println("7 - Registrar Colheita");
         System.out.println("8 - Listar Colheitas");
+        System.out.println("9 - Pesquisar Colheita");
         System.out.println("0 - Sair");
+    }
+
+    public static void aguardarTecla(Scanner sc) {
+        System.out.print("\nPressione Enter para voltar ao menu principal...");
+        sc.nextLine();
     }
 }

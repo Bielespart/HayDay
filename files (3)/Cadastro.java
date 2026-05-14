@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 public class Cadastro {
-
     // Funcionários
     public static String nomesFuncionarios[] = new String[100];
     public static String matriculas[] = new String[100];
@@ -28,11 +27,26 @@ public class Cadastro {
 
         System.out.println("\n── Cadastrar Funcionário ──");
 
+        if (totalFuncionarios >= nomesFuncionarios.length) {
+            System.out.println("Limite de funcionários atingido.");
+            return;
+        }
+
         System.out.print("Nome completo: ");
         String nome = sc.nextLine().trim();
 
+        if (nome.equals("")) {
+            System.out.println("Nome não pode ficar vazio.");
+            return;
+        }
+
         System.out.print("Matrícula: ");
         String matricula = sc.nextLine().trim();
+
+        if (matricula.equals("")) {
+            System.out.println("Matrícula não pode ficar vazia.");
+            return;
+        }
 
         // Verifica duplicidade
         if (buscarPorMatricula(matricula) != -1) {
@@ -90,9 +104,13 @@ public class Cadastro {
 
     public static int buscarPorMatricula(String matricula) {
 
+        if (matricula == null) {
+            return -1;
+        }
+
         for (int i = 0; i < totalFuncionarios; i++) {
 
-            if (matriculas[i].equals(matricula)) {
+            if (matriculas[i] != null && matriculas[i].equalsIgnoreCase(matricula)) {
                 return i;
             }
         }
@@ -108,8 +126,18 @@ public class Cadastro {
 
         System.out.println("\n── Cadastrar Talhão ──");
 
+        if (totalTalhoes >= codigosTalhoes.length) {
+            System.out.println("Limite de talhões atingido.");
+            return;
+        }
+
         System.out.print("Código do talhão (ex: T01): ");
         String codigo = sc.nextLine().trim().toUpperCase();
+
+        if (codigo.equals("")) {
+            System.out.println("Código do talhão não pode ficar vazio.");
+            return;
+        }
 
         if (buscarTalhao(codigo) != -1) {
             System.out.println("✗ Código já cadastrado!");
@@ -119,8 +147,18 @@ public class Cadastro {
         System.out.print("Nome do talhão: ");
         String nome = sc.nextLine().trim();
 
+        if (nome.equals("")) {
+            System.out.println("Nome do talhão não pode ficar vazio.");
+            return;
+        }
+
         System.out.print("Variedade do café: ");
         String variedade = sc.nextLine().trim();
+
+        if (variedade.equals("")) {
+            System.out.println("Variedade do café não pode ficar vazia.");
+            return;
+        }
 
         System.out.print("Estimativa de produção (litros): ");
         String estimativa = sc.nextLine().trim();
@@ -175,9 +213,13 @@ public class Cadastro {
 
     public static int buscarTalhao(String codigo) {
 
+        if (codigo == null) {
+            return -1;
+        }
+
         for (int i = 0; i < totalTalhoes; i++) {
 
-            if (codigosTalhoes[i].equalsIgnoreCase(codigo)) {
+            if (codigosTalhoes[i] != null && codigosTalhoes[i].equalsIgnoreCase(codigo)) {
                 return i;
             }
         }
@@ -193,8 +235,18 @@ public class Cadastro {
 
         System.out.println("\n── Cadastrar Trator ──");
 
+        if (totalTratores >= placas.length) {
+            System.out.println("Limite de tratores atingido.");
+            return;
+        }
+
         System.out.print("Placa (ex: ABC-1234): ");
         String placa = sc.nextLine().trim().toUpperCase();
+
+        if (placa.equals("")) {
+            System.out.println("Placa não pode ficar vazia.");
+            return;
+        }
 
         if (buscarTrator(placa) != -1) {
             System.out.println("✗ Placa já cadastrada!");
@@ -243,9 +295,13 @@ public class Cadastro {
 
     public static int buscarTrator(String placa) {
 
+        if (placa == null) {
+            return -1;
+        }
+
         for (int i = 0; i < totalTratores; i++) {
 
-            if (placas[i].equalsIgnoreCase(placa)) {
+            if (placas[i] != null && placas[i].equalsIgnoreCase(placa)) {
                 return i;
             }
         }
