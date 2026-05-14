@@ -12,6 +12,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
+        Persistencia.carregarTudo(datas, matriculas, codigosTalhao, placas, litrosColhidos, destinos);
+
         int opcao = -1;
 
         while (opcao != 0) {
@@ -27,15 +29,27 @@ public class Main {
 
             switch (opcao) {
                 case 1:
+                    int totalFuncionariosAntes = Cadastro.totalFuncionarios;
                     Cadastro.cadastrarFuncionario(sc);
+                    if (Cadastro.totalFuncionarios > totalFuncionariosAntes) {
+                        salvarDados();
+                    }
                     break;
 
                 case 2:
+                    int totalTalhoesAntes = Cadastro.totalTalhoes;
                     Cadastro.cadastrarTalhao(sc);
+                    if (Cadastro.totalTalhoes > totalTalhoesAntes) {
+                        salvarDados();
+                    }
                     break;
 
                 case 3:
+                    int totalTratoresAntes = Cadastro.totalTratores;
                     Cadastro.cadastrarTrator(sc);
+                    if (Cadastro.totalTratores > totalTratoresAntes) {
+                        salvarDados();
+                    }
                     break;
 
                 case 4:
@@ -54,6 +68,7 @@ public class Main {
                     break;
 
                 case 7:
+                    int totalColheitasAntes = Colheita.quantidadeColheitas;
                     Colheita.registrarColheita(
                             Cadastro.nomesFuncionarios,
                             Cadastro.totalFuncionarios,
@@ -68,6 +83,9 @@ public class Main {
                             litrosColhidos,
                             destinos,
                             sc);
+                    if (Colheita.quantidadeColheitas > totalColheitasAntes) {
+                        salvarDados();
+                    }
                     aguardarTecla(sc);
                     break;
 
@@ -95,6 +113,7 @@ public class Main {
                     break;
 
                 case 0:
+                    salvarDados();
                     System.out.println("Sistema encerrado.");
                     break;
 
@@ -123,5 +142,9 @@ public class Main {
     public static void aguardarTecla(Scanner sc) {
         System.out.print("\nPressione Enter para voltar ao menu principal...");
         sc.nextLine();
+    }
+
+    public static void salvarDados() {
+        Persistencia.salvarTudo(datas, matriculas, codigosTalhao, placas, litrosColhidos, destinos);
     }
 }

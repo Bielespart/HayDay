@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TelaTeste",
+            "request": "launch",
+            "mainClass": "TelaTeste",
+            "projectName": "hayday_9a53aec9"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
