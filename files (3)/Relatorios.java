@@ -17,7 +17,7 @@ public class Relatorios {
             int totalColheitas,
             Scanner sc) {
 
-        System.out.println("\n--- Exportar Relatorio Quinzenal ---");
+        System.out.println("\n--- Exportar Relatorio Geral ---");
 
         if (totalColheitas == 0) {
             System.out.println("Nenhuma colheita registrada para exportar.");
@@ -64,57 +64,170 @@ public class Relatorios {
         }
 
         double receita = producaoTotal * valorVenda;
-        double gasto = producaoTotal * gastoLitro;
-        double lucro = receita - gasto;
+        double gastoProducao = producaoTotal * gastoLitro;
+        double gastoSalarios = calcularGastoSalarios();
+        double lucro = receita - gastoProducao - gastoSalarios;
+        double valorTotalTratores = calcularValorTotalTratores();
 
         try {
             FileWriter fw = new FileWriter(new File(pastaDados(), "relatorio_quinzenal.txt"));
             BufferedWriter bw = new BufferedWriter(fw);
 
-            bw.write("RELATORIO QUINZENAL");
+            bw.write("RELATORIO GERAL DO SISTEMA");
             bw.newLine();
             bw.write("Quinzena: " + quinzena);
             bw.newLine();
-            bw.write("Producao total: " + producaoTotal + " L");
-            bw.newLine();
-            bw.write("Total no terreiro: " + totalTerreiro + " L");
-            bw.newLine();
-            bw.write("Total no secador: " + totalSecador + " L");
-            bw.newLine();
-            bw.write("Valor de venda por litro: R$ " + formatarDinheiro(valorVenda));
-            bw.newLine();
-            bw.write("Gasto por litro: R$ " + formatarDinheiro(gastoLitro));
-            bw.newLine();
-            bw.write("Receita estimada: R$ " + formatarDinheiro(receita));
-            bw.newLine();
-            bw.write("Gasto estimado: R$ " + formatarDinheiro(gasto));
-            bw.newLine();
-            bw.write("Lucro estimado: R$ " + formatarDinheiro(lucro));
-            bw.newLine();
-            bw.newLine();
-            bw.write("DETALHAMENTO DAS COLHEITAS");
             bw.newLine();
 
-            for (int i = 0; i < totalColheitas; i++) {
-                bw.write((i + 1) + " - Data: " + datas[i]
-                        + " | Matricula: " + matriculas[i]
-                        + " | Talhao: " + codigosTalhao[i]
-                        + " | Trator: " + placas[i]
-                        + " | Litros: " + litrosColhidos[i]
-                        + " | Destino: " + destinos[i]);
-                bw.newLine();
-            }
+            escreverResumoFinanceiro(bw, producaoTotal, totalTerreiro, totalSecador, valorVenda, gastoLitro,
+                    receita, gastoProducao, gastoSalarios, lucro, valorTotalTratores);
+            escreverFuncionarios(bw);
+            escreverTalhoes(bw);
+            escreverFrota(bw);
+            escreverColheitas(bw, datas, matriculas, codigosTalhao, placas, litrosColhidos, destinos, totalColheitas);
+            escreverArmazenamento(bw, totalTerreiro, totalSecador);
 
             bw.close();
 
             System.out.println("Relatorio exportado com sucesso para relatorio_quinzenal.txt");
+            System.out.println("Relatorio exportado com dados da equipe, lavouras, maquinario, safra e armazenamento.");
             System.out.println("Producao total: " + producaoTotal + " L");
-            System.out.println("Receita estimada: R$ " + formatarDinheiro(receita));
-            System.out.println("Gasto estimado: R$ " + formatarDinheiro(gasto));
-            System.out.println("Lucro estimado: R$ " + formatarDinheiro(lucro));
+            System.out.println("Lucro se vender todo o estoque: R$ " + formatarDinheiro(lucro));
         } catch (IOException e) {
             System.out.println("Erro ao exportar relatorio_quinzenal.txt: " + e.getMessage());
         }
+    }
+
+    private static void escreverResumoFinanceiro(
+            BufferedWriter bw,
+            int producaoTotal,
+            int totalTerreiro,
+            int totalSecador,
+            double valorVenda,
+            double gastoLitro,
+            double receita,
+            double gastoProducao,
+            double gastoSalarios,
+            double lucro,
+            double valorTotalTratores) throws IOException {
+
+        bw.write("== RESUMO FINANCEIRO E PRODUCAO ==");
+        bw.newLine();
+        bw.write("Producao total: " + producaoTotal + " L");
+        bw.newLine();
+        bw.write("Total no terreiro: " + totalTerreiro + " L");
+        bw.newLine();
+        bw.write("Total no secador: " + totalSecador + " L");
+        bw.newLine();
+        bw.write("Valor de venda por litro: R$ " + formatarDinheiro(valorVenda));
+        bw.newLine();
+        bw.write("Gasto por litro: R$ " + formatarDinheiro(gastoLitro));
+        bw.newLine();
+        bw.write("Receita estimada: R$ " + formatarDinheiro(receita));
+        bw.newLine();
+        bw.write("Gasto estimado com producao: R$ " + formatarDinheiro(gastoProducao));
+        bw.newLine();
+        bw.write("Gasto com salarios: R$ " + formatarDinheiro(gastoSalarios));
+        bw.newLine();
+        bw.write("Lucro se vender todo o estoque: R$ " + formatarDinheiro(lucro));
+        bw.newLine();
+        bw.write("Valor total dos tratores: R$ " + formatarDinheiro(valorTotalTratores));
+        bw.newLine();
+        bw.newLine();
+    }
+
+    private static void escreverFuncionarios(BufferedWriter bw) throws IOException {
+        bw.write("== EQUIPE DE CAMPO ==");
+        bw.newLine();
+        bw.write("Numero de funcionarios: " + Cadastro.totalFuncionarios);
+        bw.newLine();
+        bw.write("Gasto total com salarios: R$ " + formatarDinheiro(calcularGastoSalarios()));
+        bw.newLine();
+
+        for (int i = 0; i < Cadastro.totalFuncionarios; i++) {
+            bw.write((i + 1) + " - Matricula: " + Cadastro.matriculas[i]
+                    + " | Nome: " + Cadastro.nomesFuncionarios[i]
+                    + " | Tipo: " + Cadastro.tiposFuncionarios[i]
+                    + " | Salario: R$ " + Cadastro.salariosFuncionarios[i]);
+            bw.newLine();
+        }
+
+        bw.newLine();
+    }
+
+    private static void escreverTalhoes(BufferedWriter bw) throws IOException {
+        bw.write("== LAVOURAS E TALHOES ==");
+        bw.newLine();
+        bw.write("Numero de talhoes: " + Cadastro.totalTalhoes);
+        bw.newLine();
+
+        for (int i = 0; i < Cadastro.totalTalhoes; i++) {
+            bw.write((i + 1) + " - Codigo: " + Cadastro.codigosTalhoes[i]
+                    + " | Nome: " + Cadastro.nomesTalhoes[i]
+                    + " | Variedade: " + Cadastro.variedadesCafe[i]
+                    + " | Estimativa: " + Cadastro.estimativas[i] + " L");
+            bw.newLine();
+        }
+
+        bw.newLine();
+    }
+
+    private static void escreverFrota(BufferedWriter bw) throws IOException {
+        bw.write("== MAQUINARIO AGRICOLA ==");
+        bw.newLine();
+        bw.write("Numero de tratores: " + Cadastro.totalTratores);
+        bw.newLine();
+        bw.write("Valor total dos tratores: R$ " + formatarDinheiro(calcularValorTotalTratores()));
+        bw.newLine();
+
+        for (int i = 0; i < Cadastro.totalTratores; i++) {
+            bw.write((i + 1) + " - Placa: " + Cadastro.placas[i]
+                    + " | Capacidade: " + Cadastro.capacidades[i] + " L"
+                    + " | Valor: R$ " + Cadastro.valoresTratores[i]);
+            bw.newLine();
+        }
+
+        bw.newLine();
+    }
+
+    private static void escreverColheitas(
+            BufferedWriter bw,
+            String[] datas,
+            String[] matriculas,
+            String[] codigosTalhao,
+            String[] placas,
+            String[] litrosColhidos,
+            String[] destinos,
+            int totalColheitas) throws IOException {
+
+        bw.write("== SAFRA COLHIDA ==");
+        bw.newLine();
+        bw.write("Numero de colheitas: " + totalColheitas);
+        bw.newLine();
+
+        for (int i = 0; i < totalColheitas; i++) {
+            bw.write((i + 1) + " - Data: " + datas[i]
+                    + " | Matricula: " + matriculas[i]
+                    + " | Talhao: " + codigosTalhao[i]
+                    + " | Trator: " + placas[i]
+                    + " | Litros: " + litrosColhidos[i]
+                    + " | Destino: " + destinos[i]);
+            bw.newLine();
+        }
+
+        bw.newLine();
+    }
+
+    private static void escreverArmazenamento(BufferedWriter bw, int totalTerreiro, int totalSecador) throws IOException {
+        bw.write("== ARMAZENAMENTO DA PRODUCAO ==");
+        bw.newLine();
+        bw.write("Total no terreiro: " + totalTerreiro + " L");
+        bw.newLine();
+        bw.write("Total no secador: " + totalSecador + " L");
+        bw.newLine();
+        bw.write("Total armazenado: " + (totalTerreiro + totalSecador) + " L");
+        bw.newLine();
+        bw.newLine();
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -292,6 +405,38 @@ public class Relatorios {
             return Double.parseDouble(valor.replace(",", "."));
         } catch (NumberFormatException e) {
             return -1;
+        }
+    }
+
+    private static double calcularGastoSalarios() {
+        double total = 0;
+
+        for (int i = 0; i < Cadastro.totalFuncionarios; i++) {
+            total += lerDoubleSeguro(Cadastro.salariosFuncionarios[i]);
+        }
+
+        return total;
+    }
+
+    private static double calcularValorTotalTratores() {
+        double total = 0;
+
+        for (int i = 0; i < Cadastro.totalTratores; i++) {
+            total += lerDoubleSeguro(Cadastro.valoresTratores[i]);
+        }
+
+        return total;
+    }
+
+    private static double lerDoubleSeguro(String valor) {
+        if (valor == null) {
+            return 0;
+        }
+
+        try {
+            return Double.parseDouble(valor.replace(",", "."));
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 

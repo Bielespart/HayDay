@@ -5,6 +5,7 @@ public class Cadastro {
     public static String nomesFuncionarios[] = new String[100];
     public static String matriculas[] = new String[100];
     public static String tiposFuncionarios[] = new String[100];
+    public static String salariosFuncionarios[] = new String[100];
     public static int totalFuncionarios = 0;
 
     // Talhões
@@ -17,6 +18,7 @@ public class Cadastro {
     // Frota
     public static String placas[] = new String[100];
     public static String capacidades[] = new String[100];
+    public static String valoresTratores[] = new String[100];
     public static int totalTratores = 0;
 
     // ─────────────────────────────────────────
@@ -70,9 +72,18 @@ public class Cadastro {
             tipoStr = "Fixo";
         }
 
+        System.out.print("Salario: ");
+        String salario = sc.nextLine().trim();
+
+        if (!isValorMonetarioValido(salario)) {
+            System.out.println("Salario invalido!");
+            return;
+        }
+
         nomesFuncionarios[totalFuncionarios] = nome;
         matriculas[totalFuncionarios] = matricula;
         tiposFuncionarios[totalFuncionarios] = tipoStr;
+        salariosFuncionarios[totalFuncionarios] = salario;
 
         totalFuncionarios++;
 
@@ -88,16 +99,17 @@ public class Cadastro {
             return;
         }
 
-        System.out.printf("%-10s %-25s %-10s%n", "Mat.", "Nome", "Tipo");
-        System.out.println("────────────────────────────────────────────");
+        System.out.printf("%-10s %-25s %-10s %-12s%n", "Mat.", "Nome", "Tipo", "Salario");
+        System.out.println("-------------------------------------------------------------");
 
         for (int i = 0; i < totalFuncionarios; i++) {
 
             System.out.printf(
-                "%-10s %-25s %-10s%n",
+                "%-10s %-25s %-10s R$ %-9s%n",
                 matriculas[i],
                 nomesFuncionarios[i],
-                tiposFuncionarios[i]
+                tiposFuncionarios[i],
+                salariosFuncionarios[i]
             );
         }
     }
@@ -256,19 +268,26 @@ public class Cadastro {
         System.out.print("Capacidade da carreta (litros): ");
         String capacidade = sc.nextLine().trim();
 
-        if (isNumericoPositivo(capacidade)) {
-
-            placas[totalTratores] = placa;
-            capacidades[totalTratores] = capacidade;
-
-            totalTratores++;
-
-            System.out.println("✔ Trator cadastrado!");
-
-        } else {
-
+        if (!isNumericoPositivo(capacidade)) {
             System.out.println("✗ Capacidade inválida!");
+            return;
         }
+
+        System.out.print("Valor do trator: ");
+        String valorTrator = sc.nextLine().trim();
+
+        if (!isValorMonetarioValido(valorTrator)) {
+            System.out.println("Valor do trator invalido!");
+            return;
+        }
+
+        placas[totalTratores] = placa;
+        capacidades[totalTratores] = capacidade;
+        valoresTratores[totalTratores] = valorTrator;
+
+        totalTratores++;
+
+        System.out.println("✔ Trator cadastrado!");
     }
 
     public static void listarTratores() {
@@ -280,15 +299,16 @@ public class Cadastro {
             return;
         }
 
-        System.out.printf("%-12s %-15s%n", "Placa", "Capacidade (L)");
-        System.out.println("────────────────────────────");
+        System.out.printf("%-12s %-15s %-12s%n", "Placa", "Capacidade (L)", "Valor");
+        System.out.println("--------------------------------------------");
 
         for (int i = 0; i < totalTratores; i++) {
 
             System.out.printf(
-                "%-12s %-15s%n",
+                "%-12s %-15s R$ %-9s%n",
                 placas[i],
-                capacidades[i]
+                capacidades[i],
+                valoresTratores[i]
             );
         }
     }
@@ -336,6 +356,20 @@ public class Cadastro {
 
         } catch (NumberFormatException e) {
 
+            return false;
+        }
+    }
+
+    private static boolean isValorMonetarioValido(String valor) {
+
+        if (valor.length() == 0) {
+            return false;
+        }
+
+        try {
+            double numero = Double.parseDouble(valor.replace(",", "."));
+            return numero >= 0;
+        } catch (NumberFormatException e) {
             return false;
         }
     }

@@ -1,15 +1,47 @@
-RELATORIO QUINZENAL
-Quinzena: 01/01/01 a 30/12/2030
+RELATORIO GERAL DO SISTEMA
+Quinzena: 0
+
+== RESUMO FINANCEIRO E PRODUCAO ==
 Producao total: 84000 L
 Total no terreiro: 4000 L
 Total no secador: 80000 L
-Valor de venda por litro: R$ 100,00
-Gasto por litro: R$ 20,00
-Receita estimada: R$ 8400000,00
-Gasto estimado: R$ 1680000,00
-Lucro estimado: R$ 6720000,00
+Valor de venda por litro: R$ 5,00
+Gasto por litro: R$ 1,00
+Receita estimada: R$ 420000,00
+Gasto estimado com producao: R$ 84000,00
+Gasto com salarios: R$ 0,00
+Lucro se vender todo o estoque: R$ 336000,00
+Valor total dos tratores: R$ 0,00
 
-DETALHAMENTO DAS COLHEITAS
+== EQUIPE DE CAMPO ==
+Numero de funcionarios: 6
+Gasto total com salarios: R$ 0,00
+1 - Matricula: 39842 | Nome: jose lindo | Tipo: Diarista | Salario: R$ 0
+2 - Matricula: 10100 | Nome: Gabriel Jesus | Tipo: Diarista | Salario: R$ 0
+3 - Matricula: 676767 | Nome: Miguel Maciel | Tipo: Diarista | Salario: R$ 0
+4 - Matricula: 123 | Nome: Miguel de Oliveira Maciel | Tipo: Fixo | Salario: R$ 0
+5 - Matricula: 1010 | Nome: Mario | Tipo: Fixo | Salario: R$ 0
+6 - Matricula: 007 | Nome: Pedro | Tipo: Fixo | Salario: R$ 0
+
+== LAVOURAS E TALHOES ==
+Numero de talhoes: 2
+1 - Codigo: T01 | Nome: Talh�o Sul | Variedade: Ar�bica | Estimativa: 38000 L
+2 - Codigo: T02 | Nome: Talh�o Sul | Variedade: Catua� | Estimativa: 20000 L
+
+== MAQUINARIO AGRICOLA ==
+Numero de tratores: 2
+Valor total dos tratores: R$ 0,00
+1 - Placa: EAE-31E3 | Capacidade: 4500 L | Valor: R$ 0
+2 - Placa: BOP-E951 | Capacidade: 5000 L | Valor: R$ 0
+
+== SAFRA COLHIDA ==
+Numero de colheitas: 3
 1 - Data: 08/09/2019 | Matricula: 676767 | Talhao: T01 | Trator: BOP-E951 | Litros: 4000 | Destino: Terreiro
 2 - Data: 10/10/2010 | Matricula: 39842 | Talhao: T02 | Trator: BOP-E951 | Litros: 30000 | Destino: Secador
 3 - Data: 08/11/1111 | Matricula: 007 | Talhao: T02 | Trator: EAE-31E3 | Litros: 50000 | Destino: Secador
+
+== ARMAZENAMENTO DA PRODUCAO ==
+Total no terreiro: 4000 L
+Total no secador: 80000 L
+Total armazenado: 84000 L
+

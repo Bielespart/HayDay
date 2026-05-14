@@ -49,7 +49,8 @@ public class Persistencia {
             for (int i = 0; i < Cadastro.totalFuncionarios; i++) {
                 bw.write(limpar(Cadastro.nomesFuncionarios[i]) + SEPARADOR
                         + limpar(Cadastro.matriculas[i]) + SEPARADOR
-                        + limpar(Cadastro.tiposFuncionarios[i]));
+                        + limpar(Cadastro.tiposFuncionarios[i]) + SEPARADOR
+                        + limpar(Cadastro.salariosFuncionarios[i]));
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -75,7 +76,8 @@ public class Persistencia {
         try (BufferedWriter bw = criarEscritor("frota.txt")) {
             for (int i = 0; i < Cadastro.totalTratores; i++) {
                 bw.write(limpar(Cadastro.placas[i]) + SEPARADOR
-                        + limpar(Cadastro.capacidades[i]));
+                        + limpar(Cadastro.capacidades[i]) + SEPARADOR
+                        + limpar(Cadastro.valoresTratores[i]));
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -120,6 +122,11 @@ public class Persistencia {
                     Cadastro.nomesFuncionarios[pos] = partes[0];
                     Cadastro.matriculas[pos] = partes[1];
                     Cadastro.tiposFuncionarios[pos] = partes[2];
+                    if (partes.length >= 4) {
+                        Cadastro.salariosFuncionarios[pos] = partes[3];
+                    } else {
+                        Cadastro.salariosFuncionarios[pos] = "0";
+                    }
                     Cadastro.totalFuncionarios++;
                 }
             }
@@ -164,6 +171,11 @@ public class Persistencia {
                     int pos = Cadastro.totalTratores;
                     Cadastro.placas[pos] = partes[0];
                     Cadastro.capacidades[pos] = partes[1];
+                    if (partes.length >= 3) {
+                        Cadastro.valoresTratores[pos] = partes[2];
+                    } else {
+                        Cadastro.valoresTratores[pos] = "0";
+                    }
                     Cadastro.totalTratores++;
                 }
             }

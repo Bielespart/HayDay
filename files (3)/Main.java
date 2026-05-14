@@ -2,6 +2,8 @@ import java.util.Scanner;
 
 public class Main {
 
+    static final int LARGURA_TELA = 54;
+
     static String[] datas = new String[100];
     static String[] matriculas = new String[100];
     static String[] codigosTalhao = new String[100];
@@ -14,6 +16,7 @@ public class Main {
 
         Persistencia.carregarTudo(datas, matriculas, codigosTalhao, placas, litrosColhidos, destinos);
         Armazenamento.carregarResumo();
+        exibirTelaInicial();
 
         int opcao = -1;
 
@@ -156,20 +159,64 @@ public class Main {
     }
 
     public static void exibirMenu() {
-        System.out.println("\n--- MENU PRINCIPAL ---");
-        System.out.println("1 - Cadastrar Funcionario");
-        System.out.println("2 - Cadastrar Talhao");
-        System.out.println("3 - Cadastrar Trator");
-        System.out.println("4 - Listar Funcionarios");
-        System.out.println("5 - Listar Talhoes");
-        System.out.println("6 - Listar Tratores");
-        System.out.println("7 - Registrar Colheita");
-        System.out.println("8 - Listar Colheitas");
-        System.out.println("9 - Pesquisar Colheita");
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("             MENU PRINCIPAL             ");
+        System.out.println("========================================");
+        System.out.println("[Cadastros]");
+        System.out.println(" 1 - Cadastrar Funcionario");
+        System.out.println(" 2 - Cadastrar Talhao");
+        System.out.println(" 3 - Cadastrar Trator");
+        System.out.println();
+        System.out.println("[Listagens e Consultas]");
+        System.out.println(" 4 - Listar Funcionarios");
+        System.out.println(" 5 - Listar Talhoes");
+        System.out.println(" 6 - Listar Tratores");
+        System.out.println(" 7 - Registrar Colheita");
+        System.out.println(" 8 - Listar Colheitas");
+        System.out.println(" 9 - Pesquisar Colheita");
         System.out.println("10 - Listar em ordem alfabetica");
         System.out.println("11 - Listar Armazenamento");
+        System.out.println();
+        System.out.println("[Relatorios]");
         System.out.println("12 - Exportar Relatorio Quinzenal");
-        System.out.println("0 - Sair");
+        System.out.println();
+        System.out.println(" 0 - Sair");
+        System.out.println("========================================");
+    }
+
+    public static void exibirTelaInicial() {
+        System.out.println();
+        linhaCentralizada();
+        imprimirCentralizado("FAZENDA ESPERANCA");
+        imprimirCentralizado("Sistema de Controle de Safra");
+        linhaCentralizada();
+        imprimirCentralizado("Dados carregados com sucesso.");
+        imprimirCentralizado("Funcionarios: " + Cadastro.totalFuncionarios);
+        imprimirCentralizado("Talhoes: " + Cadastro.totalTalhoes);
+        imprimirCentralizado("Tratores: " + Cadastro.totalTratores);
+        imprimirCentralizado("Colheitas: " + Colheita.quantidadeColheitas);
+        linhaCentralizada();
+    }
+
+    public static void linhaCentralizada() {
+        String linha = "";
+
+        for (int i = 0; i < LARGURA_TELA; i++) {
+            linha += "=";
+        }
+
+        System.out.println(linha);
+    }
+
+    public static void imprimirCentralizado(String texto) {
+        int espacos = (LARGURA_TELA - texto.length()) / 2;
+
+        for (int i = 0; i < espacos; i++) {
+            System.out.print(" ");
+        }
+
+        System.out.println(texto);
     }
 
     public static void listarModulos() {

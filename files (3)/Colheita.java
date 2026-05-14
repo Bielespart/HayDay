@@ -269,15 +269,16 @@ public class Colheita {
 
     private static void listarOpcoesFuncionarios() {
         System.out.println("\nFuncionarios cadastrados:");
-        System.out.printf("%-12s %-25s %-10s%n", "Matricula", "Nome", "Tipo");
-        System.out.println("--------------------------------------------------");
+        System.out.printf("%-12s %-25s %-10s %-12s%n", "Matricula", "Nome", "Tipo", "Salario");
+        System.out.println("----------------------------------------------------------------");
 
         for (int i = 0; i < Cadastro.totalFuncionarios; i++) {
             System.out.printf(
-                    "%-12s %-25s %-10s%n",
+                    "%-12s %-25s %-10s R$ %-9s%n",
                     Cadastro.matriculas[i],
                     Cadastro.nomesFuncionarios[i],
-                    Cadastro.tiposFuncionarios[i]);
+                    Cadastro.tiposFuncionarios[i],
+                    Cadastro.salariosFuncionarios[i]);
         }
 
         System.out.println();
@@ -302,14 +303,15 @@ public class Colheita {
 
     private static void listarOpcoesTratores() {
         System.out.println("\nTratores cadastrados:");
-        System.out.printf("%-12s %-15s%n", "Placa", "Capacidade");
-        System.out.println("------------------------------");
+        System.out.printf("%-12s %-15s %-12s%n", "Placa", "Capacidade", "Valor");
+        System.out.println("--------------------------------------------");
 
         for (int i = 0; i < Cadastro.totalTratores; i++) {
             System.out.printf(
-                    "%-12s %-15s%n",
+                    "%-12s %-15s R$ %-9s%n",
                     Cadastro.placas[i],
-                    Cadastro.capacidades[i] + " L");
+                    Cadastro.capacidades[i] + " L",
+                    Cadastro.valoresTratores[i]);
         }
 
         System.out.println();

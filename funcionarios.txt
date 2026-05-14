@@ -1,6 +1,6 @@
-jose lindo;39842;Diarista
-Gabriel Jesus;10100;Diarista
-Miguel Maciel;676767;Diarista
-Miguel de Oliveira Maciel;123;Fixo
-Mario;1010;Fixo
-Pedro;007;Fixo
+jose lindo;39842;Diarista;0
+Gabriel Jesus;10100;Diarista;0
+Miguel Maciel;676767;Diarista;0
+Miguel de Oliveira Maciel;123;Fixo;0
+Mario;1010;Fixo;0
+Pedro;007;Fixo;0
