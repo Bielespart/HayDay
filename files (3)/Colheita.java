@@ -35,7 +35,7 @@ public class Colheita {
             return;
         }
 
-        System.out.print("Data (dd/mm/aaaa): ");
+        System.out.print("Data (dd/mm/yyyy): ");
         String data = sc.nextLine().trim();
 
         if (data.equals("")) {
@@ -43,6 +43,12 @@ public class Colheita {
             return;
         }
 
+        if (!isDataValida(data)) {
+            System.out.println("Data invalida! Use o formato dd/mm/yyyy. Exemplo: 14/05/2026");
+            return;
+        }
+
+        listarOpcoesFuncionarios();
         System.out.print("Matricula do funcionario: ");
         String matricula = sc.nextLine().trim();
 
@@ -60,6 +66,7 @@ public class Colheita {
 
         System.out.println("Funcionario: " + funcionarios[posFuncionario]);
 
+        listarOpcoesTalhoes();
         System.out.print("Codigo do talhao: ");
         String codigoTalhao = sc.nextLine().trim().toUpperCase();
 
@@ -77,6 +84,7 @@ public class Colheita {
 
         System.out.println("Talhao: " + talhoes[posTalhao]);
 
+        listarOpcoesTratores();
         System.out.print("Placa do trator: ");
         String placa = sc.nextLine().trim().toUpperCase();
 
@@ -122,9 +130,10 @@ public class Colheita {
         }
 
         if (litros > capacidade) {
-            System.out.println("Volume maior que a capacidade da carreta!");
-            System.out.println("Capacidade maxima permitida: " + capacidade + " litros");
-            return;
+            int viagens = calcularViagens(litros, capacidade);
+
+            System.out.println("Volume maior que a capacidade da carreta.");
+            System.out.println("Para colher todo esse campo, serao necessarias " + viagens + " viagens.");
         }
 
         String destino = "";
@@ -199,8 +208,7 @@ public class Colheita {
 
         boolean encontrou = false;
 
-        System.out.println("\nData | Matricula | Talhao | Placa | Litros | Destino");
-        System.out.println("-----------------------------------------------------");
+        imprimirCabecalho();
 
         for (int i = 0; i < quantidadeColheitas; i++) {
             boolean combina = false;
@@ -214,13 +222,7 @@ public class Colheita {
             }
 
             if (combina) {
-                System.out.println(
-                        datas[i] + " | " +
-                        matriculas[i] + " | " +
-                        codigosTalhao[i] + " | " +
-                        placas[i] + " | " +
-                        litrosColhidos[i] + " | " +
-                        destinos[i]);
+                imprimirLinha(i, datas, matriculas, codigosTalhao, placas, litrosColhidos, destinos);
                 encontrou = true;
             }
         }
@@ -245,17 +247,126 @@ public class Colheita {
             return;
         }
 
-        System.out.println("--------------------------------------------");
+        imprimirCabecalho();
 
         for (int i = 0; i < quantidadeColheitas; i++) {
-            System.out.println(
-                    datas[i] + " | " +
-                    matriculas[i] + " | " +
-                    codigosTalhao[i] + " | " +
-                    placas[i] + " | " +
-                    litrosColhidos[i] + " | " +
-                    destinos[i]);
+            imprimirLinha(i, datas, matriculas, codigosTalhao, placas, litrosColhidos, destinos);
         }
+    }
+
+    private static void imprimirCabecalho() {
+        System.out.printf(
+                "%-4s %-10s %-12s %-10s %-12s %-12s %-10s%n",
+                "N.",
+                "Data",
+                "Matricula",
+                "Talhao",
+                "Placa",
+                "Litros",
+                "Destino");
+        System.out.println("------------------------------------------------------------------------");
+    }
+
+    private static void listarOpcoesFuncionarios() {
+        System.out.println("\nFuncionarios cadastrados:");
+        System.out.printf("%-12s %-25s %-10s%n", "Matricula", "Nome", "Tipo");
+        System.out.println("--------------------------------------------------");
+
+        for (int i = 0; i < Cadastro.totalFuncionarios; i++) {
+            System.out.printf(
+                    "%-12s %-25s %-10s%n",
+                    Cadastro.matriculas[i],
+                    Cadastro.nomesFuncionarios[i],
+                    Cadastro.tiposFuncionarios[i]);
+        }
+
+        System.out.println();
+    }
+
+    private static void listarOpcoesTalhoes() {
+        System.out.println("\nTalhoes cadastrados:");
+        System.out.printf("%-10s %-25s %-15s %-12s%n", "Codigo", "Nome", "Variedade", "Estimativa");
+        System.out.println("----------------------------------------------------------------");
+
+        for (int i = 0; i < Cadastro.totalTalhoes; i++) {
+            System.out.printf(
+                    "%-10s %-25s %-15s %-12s%n",
+                    Cadastro.codigosTalhoes[i],
+                    Cadastro.nomesTalhoes[i],
+                    Cadastro.variedadesCafe[i],
+                    Cadastro.estimativas[i] + " L");
+        }
+
+        System.out.println();
+    }
+
+    private static void listarOpcoesTratores() {
+        System.out.println("\nTratores cadastrados:");
+        System.out.printf("%-12s %-15s%n", "Placa", "Capacidade");
+        System.out.println("------------------------------");
+
+        for (int i = 0; i < Cadastro.totalTratores; i++) {
+            System.out.printf(
+                    "%-12s %-15s%n",
+                    Cadastro.placas[i],
+                    Cadastro.capacidades[i] + " L");
+        }
+
+        System.out.println();
+    }
+
+    private static void imprimirLinha(
+            int indice,
+            String[] datas,
+            String[] matriculas,
+            String[] codigosTalhao,
+            String[] placas,
+            String[] litrosColhidos,
+            String[] destinos) {
+
+        System.out.printf(
+                "%-4d %-10s %-12s %-10s %-12s %-12s %-10s%n",
+                indice + 1,
+                datas[indice],
+                matriculas[indice],
+                codigosTalhao[indice],
+                placas[indice],
+                litrosColhidos[indice] + " L",
+                destinos[indice]);
+    }
+
+    private static int calcularViagens(int litros, int capacidade) {
+        int viagens = litros / capacidade;
+
+        if (litros % capacidade != 0) {
+            viagens++;
+        }
+
+        return viagens;
+    }
+
+    private static boolean isDataValida(String data) {
+
+        if (data.length() != 10) {
+            return false;
+        }
+
+        if (data.charAt(2) != '/' || data.charAt(5) != '/') {
+            return false;
+        }
+
+        String diaStr = data.substring(0, 2);
+        String mesStr = data.substring(3, 5);
+        String anoStr = data.substring(6, 10);
+
+        if (!isNumerico(diaStr) || !isNumerico(mesStr) || !isNumerico(anoStr)) {
+            return false;
+        }
+
+        int dia = Integer.parseInt(diaStr);
+        int mes = Integer.parseInt(mesStr);
+
+        return dia >= 1 && dia <= 31 && mes >= 1 && mes <= 12;
     }
 
     private static boolean isNumericoPositivo(String valor) {
@@ -277,5 +388,22 @@ public class Colheita {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    private static boolean isNumerico(String valor) {
+
+        if (valor.length() == 0) {
+            return false;
+        }
+
+        for (int i = 0; i < valor.length(); i++) {
+            char c = valor.charAt(i);
+
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -29,27 +29,33 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    int totalFuncionariosAntes = Cadastro.totalFuncionarios;
-                    Cadastro.cadastrarFuncionario(sc);
-                    if (Cadastro.totalFuncionarios > totalFuncionariosAntes) {
-                        salvarDados();
-                    }
+                    do {
+                        int totalFuncionariosAntes = Cadastro.totalFuncionarios;
+                        Cadastro.cadastrarFuncionario(sc);
+                        if (Cadastro.totalFuncionarios > totalFuncionariosAntes) {
+                            salvarDados();
+                        }
+                    } while (desejaNovoCadastro(sc));
                     break;
 
                 case 2:
-                    int totalTalhoesAntes = Cadastro.totalTalhoes;
-                    Cadastro.cadastrarTalhao(sc);
-                    if (Cadastro.totalTalhoes > totalTalhoesAntes) {
-                        salvarDados();
-                    }
+                    do {
+                        int totalTalhoesAntes = Cadastro.totalTalhoes;
+                        Cadastro.cadastrarTalhao(sc);
+                        if (Cadastro.totalTalhoes > totalTalhoesAntes) {
+                            salvarDados();
+                        }
+                    } while (desejaNovoCadastro(sc));
                     break;
 
                 case 3:
-                    int totalTratoresAntes = Cadastro.totalTratores;
-                    Cadastro.cadastrarTrator(sc);
-                    if (Cadastro.totalTratores > totalTratoresAntes) {
-                        salvarDados();
-                    }
+                    do {
+                        int totalTratoresAntes = Cadastro.totalTratores;
+                        Cadastro.cadastrarTrator(sc);
+                        if (Cadastro.totalTratores > totalTratoresAntes) {
+                            salvarDados();
+                        }
+                    } while (desejaNovoCadastro(sc));
                     break;
 
                 case 4:
@@ -142,6 +148,13 @@ public class Main {
     public static void aguardarTecla(Scanner sc) {
         System.out.print("\nPressione Enter para voltar ao menu principal...");
         sc.nextLine();
+    }
+
+    public static boolean desejaNovoCadastro(Scanner sc) {
+        System.out.print("\nDigite 1 para realizar um novo cadastro ou qualquer outra tecla para voltar ao menu principal: ");
+        String opcao = sc.nextLine().trim();
+
+        return opcao.equals("1");
     }
 
     public static void salvarDados() {
