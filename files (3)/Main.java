@@ -1,5 +1,3 @@
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 public class Main {
@@ -12,9 +10,7 @@ public class Main {
     static String[] destinos = new String[100];
 
     public static void main(String[] args) {
-        configurarAcentos();
-
-        Scanner sc = new Scanner(System.in, "UTF-8");
+        Scanner sc = new Scanner(System.in);
 
         Persistencia.carregarTudo(datas, matriculas, codigosTalhao, placas, litrosColhidos, destinos);
         Armazenamento.carregarResumo();
@@ -133,6 +129,19 @@ public class Main {
                     aguardarTecla(sc);
                     break;
 
+                case 12:
+                    Relatorios.exportarRelatorioQuinzenal(
+                            datas,
+                            matriculas,
+                            codigosTalhao,
+                            placas,
+                            litrosColhidos,
+                            destinos,
+                            Colheita.quantidadeColheitas,
+                            sc);
+                    aguardarTecla(sc);
+                    break;
+
                 case 0:
                     salvarDados();
                     System.out.println("Sistema encerrado.");
@@ -159,6 +168,7 @@ public class Main {
         System.out.println("9 - Pesquisar Colheita");
         System.out.println("10 - Listar em ordem alfabetica");
         System.out.println("11 - Listar Armazenamento");
+        System.out.println("12 - Exportar Relatorio Quinzenal");
         System.out.println("0 - Sair");
     }
 
@@ -204,14 +214,5 @@ public class Main {
     public static void salvarDados() {
         Persistencia.salvarTudo(datas, matriculas, codigosTalhao, placas, litrosColhidos, destinos);
         Armazenamento.salvarResumo(litrosColhidos, destinos, Colheita.quantidadeColheitas);
-    }
-
-    public static void configurarAcentos() {
-        try {
-            System.setOut(new PrintStream(System.out, true, "UTF-8"));
-            System.setErr(new PrintStream(System.err, true, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            System.out.println("Nao foi possivel configurar acentos em UTF-8.");
-        }
     }
 }

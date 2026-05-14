@@ -1,6 +1,121 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Relatorios {
+
+    public static void exportarRelatorioQuinzenal(
+            String[] datas,
+            String[] matriculas,
+            String[] codigosTalhao,
+            String[] placas,
+            String[] litrosColhidos,
+            String[] destinos,
+            int totalColheitas,
+            Scanner sc) {
+
+        System.out.println("\n--- Exportar Relatorio Quinzenal ---");
+
+        if (totalColheitas == 0) {
+            System.out.println("Nenhuma colheita registrada para exportar.");
+            return;
+        }
+
+        System.out.print("Identificacao da quinzena (ex: 01/05/2026 a 15/05/2026): ");
+        String quinzena = sc.nextLine().trim();
+
+        if (quinzena.equals("")) {
+            System.out.println("Identificacao da quinzena nao pode ficar vazia.");
+            return;
+        }
+
+        System.out.print("Valor de venda por litro: ");
+        double valorVenda = lerDouble(sc.nextLine().trim());
+
+        if (valorVenda <= 0) {
+            System.out.println("Valor de venda invalido.");
+            return;
+        }
+
+        System.out.print("Gasto por litro: ");
+        double gastoLitro = lerDouble(sc.nextLine().trim());
+
+        if (gastoLitro < 0) {
+            System.out.println("Gasto invalido.");
+            return;
+        }
+
+        int producaoTotal = 0;
+        int totalTerreiro = 0;
+        int totalSecador = 0;
+
+        for (int i = 0; i < totalColheitas; i++) {
+            int litros = converterInteiro(litrosColhidos[i], "litros colhidos");
+            producaoTotal += litros;
+
+            if (destinos[i] != null && destinos[i].equalsIgnoreCase("Terreiro")) {
+                totalTerreiro += litros;
+            } else if (destinos[i] != null && destinos[i].equalsIgnoreCase("Secador")) {
+                totalSecador += litros;
+            }
+        }
+
+        double receita = producaoTotal * valorVenda;
+        double gasto = producaoTotal * gastoLitro;
+        double lucro = receita - gasto;
+
+        try {
+            FileWriter fw = new FileWriter(new File(pastaDados(), "relatorio_quinzenal.txt"));
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            bw.write("RELATORIO QUINZENAL");
+            bw.newLine();
+            bw.write("Quinzena: " + quinzena);
+            bw.newLine();
+            bw.write("Producao total: " + producaoTotal + " L");
+            bw.newLine();
+            bw.write("Total no terreiro: " + totalTerreiro + " L");
+            bw.newLine();
+            bw.write("Total no secador: " + totalSecador + " L");
+            bw.newLine();
+            bw.write("Valor de venda por litro: R$ " + formatarDinheiro(valorVenda));
+            bw.newLine();
+            bw.write("Gasto por litro: R$ " + formatarDinheiro(gastoLitro));
+            bw.newLine();
+            bw.write("Receita estimada: R$ " + formatarDinheiro(receita));
+            bw.newLine();
+            bw.write("Gasto estimado: R$ " + formatarDinheiro(gasto));
+            bw.newLine();
+            bw.write("Lucro estimado: R$ " + formatarDinheiro(lucro));
+            bw.newLine();
+            bw.newLine();
+            bw.write("DETALHAMENTO DAS COLHEITAS");
+            bw.newLine();
+
+            for (int i = 0; i < totalColheitas; i++) {
+                bw.write((i + 1) + " - Data: " + datas[i]
+                        + " | Matricula: " + matriculas[i]
+                        + " | Talhao: " + codigosTalhao[i]
+                        + " | Trator: " + placas[i]
+                        + " | Litros: " + litrosColhidos[i]
+                        + " | Destino: " + destinos[i]);
+                bw.newLine();
+            }
+
+            bw.close();
+
+            System.out.println("Relatorio exportado com sucesso para relatorio_quinzenal.txt");
+            System.out.println("Producao total: " + producaoTotal + " L");
+            System.out.println("Receita estimada: R$ " + formatarDinheiro(receita));
+            System.out.println("Gasto estimado: R$ " + formatarDinheiro(gasto));
+            System.out.println("Lucro estimado: R$ " + formatarDinheiro(lucro));
+        } catch (IOException e) {
+            System.out.println("Erro ao exportar relatorio_quinzenal.txt: " + e.getMessage());
+        }
+    }
 
     // ─────────────────────────────────────────────────────────────
     // RELATÓRIO A — Acerto da Quinzena
@@ -170,5 +285,27 @@ public class Relatorios {
             System.out.println("Valor invalido em " + campo + ": " + valor + ". Considerando 0.");
             return 0;
         }
+    }
+
+    private static double lerDouble(String valor) {
+        try {
+            return Double.parseDouble(valor.replace(",", "."));
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    private static String formatarDinheiro(double valor) {
+        return String.format("%.2f", valor);
+    }
+
+    private static File pastaDados() {
+        File atual = new File(System.getProperty("user.dir"));
+
+        if (atual.getName().equals("files (3)")) {
+            return atual.getParentFile();
+        }
+
+        return atual;
     }
 }
